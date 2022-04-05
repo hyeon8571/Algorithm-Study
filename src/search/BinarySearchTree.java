@@ -1,4 +1,8 @@
 package search;
+/*
+    검색시간: O(log n)
+    삽입시간: O(log n)
+ */
 public class BinarySearchTree {
 
         class Node {
@@ -13,7 +17,8 @@ public class BinarySearchTree {
     }
 
     Node root;
-
+/*
+    삽입없이 트리를 만드는 법
     public void makeTree(int[] arr) {
         root = makeTree(arr, 0, arr.length-1);
     }
@@ -28,7 +33,7 @@ public class BinarySearchTree {
 
         return node;
     }
-
+*/
     public void search(Node node, int find) {
         if (find < node.data) {
             System.out.println("찾을 값이 " + node.data + "보다 작음");
@@ -41,23 +46,51 @@ public class BinarySearchTree {
         else
             System.out.println("발견");
     }
+    public void insert(int value) {
+        root = insertNode(root, value);
+    }
+
+    public Node insertNode(Node root, int value) {
+        if (root == null) { //root가 비어있으면 아무런 값이 없으므로 루트에 삽입
+            root = new Node(value);
+            return root;
+        }
+        if (value < root.data) {
+            root.left = insertNode(root.left, value);
+        }
+        else if(value > root.data) {
+            root.right = insertNode(root.right, value);
+            }
+            return root;
+        }
+
 
     public static void main(String[] args) {
-        int[] arr = new int[10];
-        for(int i = 0; i < arr.length; i++) {
-            arr[i] = i + 1;
-        }
-        /*
-               5
-             /   \
-           2      8
-          / \    / \
-         1   3  6   9
-                 \   \
-                   7   10
-         */
+
         BinarySearchTree bt = new BinarySearchTree();
-        bt.makeTree(arr);
-        bt.search(bt.root, 2);
+        bt.insert(5);
+        bt.insert(6);
+        bt.insert(9);
+        bt.insert(1);
+        bt.insert(2);
+        bt.insert(4);
+        bt.insert(7);
+        bt.insert(8);
+        bt.insert(3);
+        bt.insert(10);
+
+        /*
+            5
+         /     \
+        1       6
+         \       \
+           2      9
+            \    / \
+             4  7   10
+             /   \
+            3     8
+         */
+
+        bt.search(bt.root, 10);
     }
 }

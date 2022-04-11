@@ -1,7 +1,6 @@
 package search;
 /*
     검색시간: O(log n)
-    삽입시간: O(log n)
  */
 public class BinarySearchTree {
 
@@ -46,6 +45,7 @@ public class BinarySearchTree {
         else
             System.out.println("발견");
     }
+
     public void insert(int value) {
         root = insertNode(root, value);
     }
@@ -56,41 +56,96 @@ public class BinarySearchTree {
             return root;
         }
         if (value < root.data) {
-            root.left = insertNode(root.left, value);
+             root.left = insertNode(root.left, value);
         }
         else if(value > root.data) {
-            root.right = insertNode(root.right, value);
+             root. right = insertNode(root.right, value);
             }
             return root;
         }
 
+        /*
+            삭제
+            1. 자식 노드가 없는 경우
+            2. 하나의 자식 노드를 갖는 경우
+            3. 두개의 자식 노드를 갖는 경우
+         */
+        public void delete(int value) {
+            root = delete(root, value);
+        }
+
+        public Node delete(Node root, int value) {
+            if (root == null) return root;
+            //삭제 전 value의 위치를 찾는다.
+            if (value < root.data) {
+                root.left = delete(root.left, value);
+            }
+            else if (value > root.data) {
+                root.right = delete(root.right, value);
+            }
+            else { //삭제 할 value 발견
+                if (root.left == null && root.right == null) { //삭제 할 노드의 자식노드가 없는 경우
+                    root = null;
+                    return root;
+                }
+                else if (root.left == null) { //삭제 할 노드의 자식노드가 오른쪽만 있는 경우
+                    root = root.right;
+                    return root;
+                }
+                else if (root.right == null) { //삭제 할 노드의 자식노드가 왼쪽만 있는 경우
+                    root = root.left;
+                    return root;
+                }
+                else { //삭제 할 노드의 자식노드가 2개인 경우
+                    //1. 삭제할 노드의 오른쪽 자식으로 이동한 후 가장 작은 값을 찾아 삭제 할 node에 값을 대입한다. 이 때 node를 복사하는 것이 아닌 data값만 복사한다.
+                    root.data = findMin(root.right);
+                    //2. 값을 대입해준 가장 작은 값을 가진 노드를 삭제
+                    root.right = delete(root.right, root.data);
+                }
+            }
+            return root;
+        }
+
+    public int findMin(Node root) {
+            int min = root.data;
+            while(root.left != null) {
+                min = root.left.data;
+                root = root.left;
+            }
+            return min;
+    }
 
     public static void main(String[] args) {
 
         BinarySearchTree bt = new BinarySearchTree();
         bt.insert(5);
         bt.insert(6);
-        bt.insert(9);
+        bt.insert(8);
         bt.insert(1);
         bt.insert(2);
         bt.insert(4);
         bt.insert(7);
-        bt.insert(8);
         bt.insert(3);
         bt.insert(10);
+        bt.insert(9);
+
 
         /*
             5
          /     \
         1       6
          \       \
-           2      9
-            \    / \
-             4  7   10
-             /   \
-            3     8
+           2      8
+            \    /  \
+             4  7    10
+             /       /
+            3       9
          */
 
-        bt.search(bt.root, 10);
+        bt.search(bt.root, 9);
+        bt.delete(8);
+        bt.search(bt.root, 7);
+        bt.delete(9);
+        bt.search(bt.root, 7);
     }
 }

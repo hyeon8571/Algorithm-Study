@@ -1,3 +1,7 @@
+/*
+    재귀로 해결시 엄청난 비효율 발생
+    dp를 이용하여 효율적으로 해결
+ */
 package dp;
 
 import static sun.swing.MenuItemLayoutHelper.max;
